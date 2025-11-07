@@ -1,0 +1,88 @@
+#include <stdio.h>
+
+#define MAX 10
+
+int adj[MAX][MAX];
+int visited[MAX];
+int n;
+
+// Function to create the graph
+void createGraph() {
+    int edges, src, dest, cost;
+
+    printf("Enter the number of cities: ");
+    scanf("%d", &n);
+
+    // Initialize adjacency matrix to 0
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            adj[i][j] = 0;
+        }
+    }
+
+    
+
+
+    printf("Enter the number of flights (edges): ");
+    scanf("%d", &edges);
+    printf("Enter each flight in the form: source destination cost\n");
+    printf("(City numbers start from 0 to %d)\n", n - 1);
+
+    for (int i = 0; i < edges; i++) {
+        printf("Flight %d: ", i + 1);
+        scanf("%d %d %d", &src, &dest, &cost);
+        adj[src][dest] = cost;
+        adj[dest][src] = cost;  // Undirected graph
+    }
+}
+
+// Depth First Search
+void DFS(int v) {
+    visited[v] = 1;
+    for (int i = 0; i < n; i++) {
+        if (adj[v][i] != 0 && !visited[i]) {
+            DFS(i);
+        }
+    }
+}
+
+// Function to check if graph is connected
+int isConnected() {
+    for (int i = 0; i < n; i++) {
+        visited[i] = 0;
+    }
+
+    DFS(0);  // Start from first city
+
+    for (int i = 0; i < n; i++) {
+        if (!visited[i])
+            return 0;  // not connected
+    }
+    return 1;  // connected
+}
+
+// Function to display adjacency matrix
+void displayMatrix() {
+    printf("\nAdjacency Matrix (Cost between cities):\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%3d ", adj[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+// Main function
+int main() {
+    createGraph();
+    displayMatrix();
+
+    if (isConnected())
+        printf("\n The graph is CONNECTED.\n");
+    else
+        printf("\n The graph is NOT CONNECTED.\n");
+
+    return 0;
+}
+
+

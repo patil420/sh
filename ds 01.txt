@@ -1,0 +1,92 @@
+#include <stdio.h>
+
+#define MAX 50
+
+// Function for Linear Search
+void linearSearch(int arr[], int n, int key) {
+    int found = 0;
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == key) {
+            found = 1;
+            break;
+        }
+    }
+
+    if (found)
+        printf("Roll number %d attended the training program (Linear Search).\n", key);
+    else
+        printf("Roll number %d did NOT attend the training program (Linear Search).\n", key);
+}
+
+// Function for Binary Search
+void binarySearch(int arr[], int n, int key) {
+    int low = 0, high = n - 1, mid, found = 0;
+
+    while (low <= high) {
+        mid = (low + high) / 2;
+
+        if (arr[mid] == key) {
+            found = 1;
+            break;
+        } else if (arr[mid] < key)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+
+    if (found)
+        printf("Roll number %d attended the training program (Binary Search).\n", key);
+    else
+        printf("Roll number %d did NOT attend the training program (Binary Search).\n", key);
+}
+
+int main() {
+    int roll[MAX], n, choice, key;
+
+    printf("Enter number of students who attended the training (max %d): ", MAX);
+    scanf("%d", &n);
+
+    do {
+        printf("\n--- MENU ---\n");
+        printf("1. Enter roll numbers (Random Order) and use Linear Search\n");
+        printf("2. Enter roll numbers (Sorted Order) and use Binary Search\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            printf("\nEnter roll numbers (Random Order):\n");
+            for (int i = 0; i < n; i++) {
+                printf("Student %d: ", i + 1);
+                scanf("%d", &roll[i]);
+            }
+
+            printf("\nEnter roll number to search: ");
+            scanf("%d", &key);
+            linearSearch(roll, n, key);
+            break;
+
+        case 2:
+            printf("\nEnter roll numbers (Sorted Order):\n");
+            for (int i = 0; i < n; i++) {
+                printf("Student %d: ", i + 1);
+                scanf("%d", &roll[i]);
+            }
+
+            printf("\nEnter roll number to search: ");
+            scanf("%d", &key);
+            binarySearch(roll, n, key);
+            break;
+
+        case 3:
+            printf("Exiting program...\n");
+            break;
+
+        default:
+            printf("Invalid choice! Please try again.\n");
+        }
+    } while (choice != 3);
+
+    return 0;
+}

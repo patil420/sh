@@ -1,0 +1,139 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure for linked list node
+struct node {
+    int data;              // Roll number
+    struct node *next;
+};
+
+// Function to create a new node
+struct node* createNode(int data) {
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to insert a node at the end
+void insert(struct node **head, int data) {
+    struct node *newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct node *temp = *head;
+    while (temp->next != NULL)
+        temp = temp->next;
+    temp->next = newNode;
+}
+
+// Function to check if an element exists in a list
+int search(struct node *head, int key) {
+    while (head != NULL) {
+        if (head->data == key)
+            return 1;
+        head = head->next;
+    }
+    return 0;
+}
+
+// Function to display a set
+void display(struct node *head) {
+    struct node *temp = head;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+// Function to find intersection (A ∩ B)
+struct node* intersection(struct node *A, struct node *B) {
+    struct node *result = NULL;
+    while (A != NULL) {
+        if (search(B, A->data))
+            insert(&result, A->data);
+        A = A->next;
+    }
+    return result;
+}
+
+// Function to find symmetric difference (A ⊕ B)
+struct node* symmetricDifference(struct node *A, struct node *B) {
+    struct node *result = NULL;
+
+    struct node *temp = A;
+    while (temp != NULL) {
+        if (!search(B, temp->data))
+            insert(&result, temp->data);
+        temp = temp->next;
+    }
+
+    temp = B;
+    while (temp != NULL) {
+        if (!search(A, temp->data))
+            insert(&result, temp->data);
+        temp = temp->next;
+    }
+
+    return result;
+}
+
+int main() {
+    struct node *A = NULL, *B = NULL, *both = NULL, *either = NULL;
+    int n1, n2, total, roll;
+
+    printf("Enter total number of students in class: ");
+    scanf("%d", &total);
+
+    printf("Enter number of students who like Vanilla: ");
+    scanf("%d", &n1);
+    printf("Enter roll numbers of students who like Vanilla:\n");
+    for (int i = 0; i < n1; i++) {
+        scanf("%d", &roll);
+        insert(&A, roll);
+    }
+
+    printf("Enter number of students who like Butterscotch: ");
+    scanf("%d", &n2);
+    printf("Enter roll numbers of students who like Butterscotch:\n");
+    for (int i = 0; i < n2; i++) {
+        scanf("%d", &roll);
+        insert(&B, roll);
+    }
+
+    printf("\nSet A (Vanilla): ");
+    display(A);
+
+    printf("Set B (Butterscotch): ");
+    display(B);
+
+    // a) Both vanilla and butterscotch
+    both = intersection(A, B);
+    printf("\na) Students who like both Vanilla and Butterscotch:\n");
+    display(both);
+
+    // b) Either vanilla or butterscotch but not both
+    either = symmetricDifference(A, B);
+    printf("\nb) Students who like either Vanilla or Butterscotch but not both:\n");
+    display(either);
+
+    // c) Students who like neither
+    int count_both = 0;
+    struct node *temp = both;
+    while (temp != NULL) {
+        count_both++;
+        temp = temp->next;
+    }
+
+    int count_vanilla = n1;
+    int count_butterscotch = n2;
+
+    int like_any = count_vanilla + count_butterscotch - count_both;
+    int neither = total - like_any;
+
+    printf("\nc) Number of students who like neither Vanilla nor Butterscotch: %d\n", neither);
+
+    return 0;
+}

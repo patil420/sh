@@ -1,0 +1,87 @@
+#include <stdio.h>
+#define MAX 50
+
+// Function for Selection Sort
+void selectionSort(float arr[], int n) {
+    int i, j, minIndex;
+    float temp;
+
+    for (i = 0; i < n - 1; i++) {
+        minIndex = i;
+        for (j = i + 1; j < n; j++) {
+            if (arr[j] < arr[minIndex])
+                minIndex = j;
+        }
+
+        // Swap
+        temp = arr[i];
+        arr[i] = arr[minIndex];
+        arr[minIndex] = temp;
+    }
+}
+
+// Function for Bubble Sort
+void bubbleSort(float arr[], int n) {
+    int i, j;
+    float temp;
+    for (i = 0; i < n - 1; i++) {
+        for (j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+// Function to display top 5 scores
+void displayTopFive(float arr[], int n) {
+    printf("\nTop Five Scores:\n");
+    int count = (n < 5) ? n : 5; // If less than 5 students
+    for (int i = n - 1; i >= n - count; i--) {
+        printf("%.2f\n", arr[i]);
+    }
+}
+
+int main() {
+    float percentages[MAX];
+    int n, choice;
+
+    printf("Enter number of students (max %d): ", MAX);
+    scanf("%d", &n);
+
+    printf("Enter first-year percentages:\n");
+    for (int i = 0; i < n; i++) {
+        printf("Student %d: ", i + 1);
+        scanf("%f", &percentages[i]);
+    }
+
+    printf("\nChoose Sorting Method:\n");
+    printf("1. Selection Sort\n");
+    printf("2. Bubble Sort\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+
+    switch (choice) {
+        case 1:
+            selectionSort(percentages, n);
+            printf("\nArray sorted using Selection Sort.\n");
+            break;
+        case 2:
+            bubbleSort(percentages, n);
+            printf("\nArray sorted using Bubble Sort.\n");
+            break;
+        default:
+            printf("Invalid choice!\n");
+            return 0;
+    }
+
+    printf("\nSorted Percentages (Ascending Order):\n");
+    for (int i = 0; i < n; i++)
+        printf("%.2f ", percentages[i]);
+
+    displayTopFive(percentages, n);
+
+    return 0;
+}

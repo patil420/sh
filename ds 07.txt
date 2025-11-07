@@ -1,0 +1,86 @@
+#include <stdio.h>
+#define MAX 5   // Maximum number of orders
+
+int queue[MAX];
+int front = -1, rear = -1;
+
+// Function to check if the queue is full
+int isFull() {
+    return (rear == MAX - 1);
+}
+
+// Function to check if the queue is empty
+int isEmpty() {
+    return (front == -1 || front > rear);
+}
+
+// Function to add a job (new order)
+void addOrder(int orderNo) {
+    if (isFull()) {
+        printf("❌ Cannot accept order %d. Pizza Parlor is full!\n", orderNo);
+        return;
+    }
+    if (front == -1)
+        front = 0;
+    rear++;
+    queue[rear] = orderNo;
+    printf("✅ Order %d added successfully!\n", orderNo);
+}
+
+// Function to delete a job (serve an order)
+void serveOrder() {
+    if (isEmpty()) {
+        printf("⚠️ No orders to serve!\n");
+        return;
+    }
+    printf("🍕 Order %d is being served.\n", queue[front]);
+    front++;
+}
+
+// Function to display the current queue
+void displayQueue() {
+    if (isEmpty()) {
+        printf("No pending orders.\n");
+        return;
+    }
+    printf("\n📋 Pending Orders: ");
+    for (int i = front; i <= rear; i++)
+        printf("%d ", queue[i]);
+    printf("\n");
+}
+
+int main() {
+    int choice, orderNo;
+
+    printf("===== 🍕 PIZZA PARLOR ORDER SYSTEM =====\n");
+    do {
+        printf("\n1. Add Order\n2. Serve Order\n3. Display Orders\n4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            printf("Enter Order Number: ");
+            scanf("%d", &orderNo);
+            addOrder(orderNo);
+            break;
+
+        case 2:
+            serveOrder();
+            break;
+
+        case 3:
+            displayQueue();
+            break;
+
+        case 4:
+            printf("Exiting... Thank you for visiting Pizza Parlor!\n");
+            break;
+
+        default:
+            printf("Invalid choice! Please try again.\n");
+        }
+    } while (choice != 4);
+
+    return 0;
+}
